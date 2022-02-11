@@ -1,8 +1,6 @@
 # WebviewRuby
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/webview_ruby`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+WebViewRuby is a library that provide bindings for [webview/webview](https://github.com/webview/webview) a tiny tiny cross-platform webview library to build modern cross-platform GUIs. Webview uses Cocoa/WebKit on macOS, gtk-webkit2 on Linux and Edge on Windows 10.
 
 ## Installation
 
@@ -22,17 +20,82 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Hello World
 
-## Development
+Create a new Webview instance 
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+webview = WebviewRuby::Webview.new
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Set the size and the title of the window
+
+```ruby
+webview.set_title("Example")
+webview.set_size(480, 360)
+```
+
+Navigate to a specific webpage
+
+```ruby
+webview.navigate("https://en.m.wikipedia.org/wiki/Main_Page")
+```
+
+Then run the main loop till its terminated (remember to always destroy the webview after it stops running)
+
+```ruby
+webview.run
+webview.destroy
+```
+
+### Run ruby code from JS
+
+You can bind a ruby function to a JavaScript one before the webview is in running state. To do so use the `bind` method like:
+
+```ruby
+webview.bind("exampleFunc") do
+  print("got called by js")
+end
+```
+
+Now you can use `exampleFunc` as any other JS function, you can call it from the javascript that has been loaded in the webview or
+from the html. If you want to make a function take some parameters, just add parameters to the `do` block like so: 
+
+```ruby
+webview.bind("exampleFunc") do |arg1, arg2|
+  print("got called by js with #{arg1} and #{arg2}")
+end
+```
+
+You can only use positional arguments, keyword ones wouldn't work.
+
+### Run JS code from ruby
+
+You can invoke JS code to be run asynchrounously (the result of the execution won't be returned to you) by running
+
+```ruby
+webview.eval("console.log('Called from ruby')")
+```
+
+### Terminate the main loop
+
+```
+webview.terminate
+```
+
+### Run JS code at initialisation
+
+If you want to inject JavaScript code at the initialization of the new page, such that every time the webview will open a the new page - this initialization code will be executed, then you can use
+
+```ruby
+webview.init("console.log('running at initialisation')")
+```
+
+It is guaranteed that code is executed before window.onload.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/webview_ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/webview_ruby/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/Maaarcocr/webview_ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/webview_ruby/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
