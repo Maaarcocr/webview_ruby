@@ -1,0 +1,6 @@
+require 'ffi-compiler/compile_task'
+
+FFI::Compiler::CompileTask.new('webview-ext') do |c|
+    c.cxxflags << "-std=c++11"
+    c.ldflags << "-framework WebKit"
+end
