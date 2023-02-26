@@ -24,6 +24,7 @@ module WebviewRuby
 
     def initialize(debug:false)
       @is_running = false
+      @bindings = {}
       @window = WebviewRuby.webview_create(debug ? 1 : 0, nil)
     end
 
@@ -67,6 +68,7 @@ module WebviewRuby
           terminate
         end
       end
+      @bindings[callback] = true # save a reference
       WebviewRuby.webview_bind(@window, name, callback, nil)
     end
 
