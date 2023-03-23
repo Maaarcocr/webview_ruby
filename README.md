@@ -2,7 +2,7 @@
 
 WebViewRuby is a library that provide bindings for [webview/webview](https://github.com/webview/webview) a tiny tiny cross-platform webview library to build modern cross-platform GUIs. Webview uses Cocoa/WebKit on macOS, gtk-webkit2 on Linux and Edge on Windows 10.
 
-IMPORTANT: Compilation may not work on windows and linux right now. Follow the progress [here](https://github.com/Maaarcocr/webview_ruby/issues/1)
+IMPORTANT: Compilation may not work on windows right now. Follow the progress [here](https://github.com/Maaarcocr/webview_ruby/issues/1)
 
 ## Installation
 
