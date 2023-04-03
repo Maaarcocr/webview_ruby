@@ -4,13 +4,6 @@ require "bundler/gem_tasks"
 require "rake/testtask"
 require 'ffi-compiler/compile_task'
 
-task :compile do
-  FFI::Compiler::CompileTask.new('webview-ext') do |c|
-    c.cxxflags << "-std=c++11"
-    c.ldflags << "-framework WebKit"
-  end
-end
-
 
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
