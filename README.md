@@ -57,6 +57,7 @@ You can bind a ruby function to a JavaScript one before the webview is in runnin
 ```ruby
 webview.bind("exampleFunc") do
   print("got called by js")
+  "returned string" #do not use "return" as keyword, because that exits the current thread
 end
 ```
 
@@ -70,6 +71,14 @@ end
 ```
 
 You can only use positional arguments, keyword ones wouldn't work.
+
+To get the return value in javascript, do the following:
+
+```javascript
+exampleFunc('a','b').then(result => {
+  alert(result);
+})
+```
 
 ### Run JS code from ruby
 
@@ -94,6 +103,11 @@ webview.init("console.log('running at initialisation')")
 ```
 
 It is guaranteed that code is executed before window.onload.
+
+## Caveats
+* you can only open new windows (next to the main window) via a new ruby process
+  * the new created window is not stacked to the other in the task bar
+* popups don't work
 
 ## Contributing
 

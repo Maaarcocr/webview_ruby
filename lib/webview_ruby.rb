@@ -16,6 +16,7 @@ module WebviewRuby
   attach_function :webview_navigate, [:pointer, :string], :void
   attach_function :webview_destroy, [:pointer], :void
   attach_function :webview_bind, [:pointer, :string, :pointer, :pointer], :void
+  attach_function :webview_return, [:pointer, :string, :int, :string], :void
   attach_function :webview_eval, [:pointer, :string], :void
   attach_function :webview_init, [:pointer, :string], :void
 
@@ -61,9 +62,10 @@ module WebviewRuby
           if func
             func(*params)
           else
-            block.call(*params)
+            result = block.call(*params)
+            WebviewRuby.webview_return(@window, seq, 0, result.to_json)
           end
-        rescue StandardError => e
+        rescue Exception => e
           print("Error occured: #{e.full_message}. \n\n Going to terminate\n")
           terminate
         end
