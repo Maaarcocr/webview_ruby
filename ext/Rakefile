@@ -1,13 +1,23 @@
 require 'ffi-compiler/compile_task'
 require 'rbconfig'
 
+# WebKitGTK's API for GTK 3, built on libsoup 3, which current distributions ship, like Ubuntu 24.04 and Debian 13, or on
+# libsoup 2, which older ones do, like Ubuntu 22.04. webview.h uses the same calls from either.
+LINUX_WEBKITS = %w[webkit2gtk-4.1 webkit2gtk-4.0].freeze
+
+def linux_webkit
+  LINUX_WEBKITS.find { |webkit| system('pkg-config', '--exists', webkit) } ||
+    abort("webview_ruby needs WebKitGTK's development files, like libwebkit2gtk-4.1-dev on Debian or Ubuntu")
+end
+
 FFI::Compiler::CompileTask.new('webview-ext') do |c|
   if RbConfig::CONFIG['host_os'] =~ /darwin/
     c.cxxflags << "-std=c++11"
     c.ldflags << "-framework WebKit"
   elsif RbConfig::CONFIG['host_os'] =~ /linux/
-    c.cxxflags << `pkg-config --cflags gtk+-3.0 webkit2gtk-4.0`.strip
-    c.ldflags << `pkg-config --libs gtk+-3.0 webkit2gtk-4.0`.strip
+    webkit = linux_webkit
+    c.cxxflags << `pkg-config --cflags gtk+-3.0 #{webkit}`.strip
+    c.ldflags << `pkg-config --libs gtk+-3.0 #{webkit}`.strip
   else
     puts "Unsupported operating system prolly windows, check rake file in ext directory in source code and add correct flags from here  https://github.com/webview/webview#webview-for-cc-developers "
   end
