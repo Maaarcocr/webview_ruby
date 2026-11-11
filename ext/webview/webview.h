@@ -430,9 +430,9 @@ inline std::string json_parse(const std::string s, const std::string key,
 // ====================================================================
 //
 // This implementation uses webkit2gtk backend. It requires gtk+3.0 and
-// webkit2gtk-4.0 libraries. Proper compiler flags can be retrieved via:
+// webkit2gtk-4.1 (or 4.0) libraries. Proper compiler flags can be retrieved via:
 //
-//   pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.0
+//   pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.1
 //
 // ====================================================================
 //
